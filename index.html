@@ -7,7 +7,7 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -15,6 +15,7 @@
             --accent: #0D9488;
             --bg: #F8FAFC;
             --text: #334155;
+            --text-light: #64748B;
             --white: #ffffff;
             --border: #E2E8F0;
         }
@@ -38,7 +39,7 @@
             box-shadow: 0 20px 50px rgba(30, 41, 59, 0.05); 
         }
 
-        /* --- LANDING PAGE STYLES --- */
+        /* --- LANDING PAGE --- */
         #landing-page { text-align: center; padding: 20px 0; }
         
         .hero-badge {
@@ -50,6 +51,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
+            display: inline-block;
         }
 
         .hero-title {
@@ -62,27 +64,10 @@
 
         .hero-desc {
             font-size: 1.1rem;
-            color: #64748B;
+            color: var(--text-light);
             max-width: 600px;
             margin: 0 auto 40px;
         }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 40px;
-            text-align: left;
-        }
-
-        .feature-item {
-            padding: 20px;
-            border-radius: 12px;
-            background: #F1F5F9;
-        }
-
-        .feature-item h3 { margin: 0 0 10px 0; font-size: 1rem; color: var(--accent); }
-        .feature-item p { margin: 0; font-size: 0.85rem; color: #475569; }
 
         .btn-start {
             background: var(--primary);
@@ -99,10 +84,20 @@
 
         .btn-start:hover { transform: translateY(-3px); background: #0f172a; }
 
-        /* --- QUIZ STYLES (Hidden initially) --- */
-        #quiz-section { display: none; }
+        /* --- SEÇÃO DE ARTIGOS --- */
+        .articles-section {
+            margin-top: 60px;
+            text-align: left;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+        }
 
-        header { text-align: center; margin-bottom: 30px; }
+        .article-card { margin-bottom: 30px; }
+        .article-card h3 { color: var(--primary); font-size: 1.3rem; margin-bottom: 10px; }
+        .article-card p { color: var(--text-light); font-size: 0.95rem; text-align: justify; }
+
+        /* --- QUIZ SECTION --- */
+        #quiz-section { display: none; }
         
         #progress-container { 
             position: sticky; top: 0; background: var(--white); 
@@ -111,7 +106,6 @@
         }
 
         progress { width: 100%; height: 8px; border-radius: 10px; margin-top: 8px; }
-        progress::-webkit-progress-bar { background: #E2E8F0; border-radius: 10px; }
         progress::-webkit-progress-value { background: var(--accent); border-radius: 10px; }
 
         .question-card { 
@@ -119,8 +113,6 @@
             border: 1px solid var(--border); border-radius: 16px; 
         }
 
-        .question-text { font-weight: 600; font-size: 1.1rem; margin-bottom: 20px; display: block; }
-        
         .options { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         .option label { 
             display: flex; align-items: center; justify-content: center;
@@ -130,19 +122,20 @@
 
         input[type="radio"]:checked + label { background: var(--accent); color: white; border-color: var(--accent); }
 
+        /* --- RESULTADOS --- */
         #result-area { 
             display: none; background: var(--primary); color: white;
             padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px;
         }
 
         .score-num { font-size: 4rem; font-weight: 800; color: var(--accent); }
-        .btn-pdf { 
-            background: var(--accent); color: white; padding: 15px 30px; 
-            border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 20px;
+
+        footer {
+            margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border);
+            font-size: 0.75rem; color: #94A3B8; text-align: center;
         }
 
         @media (max-width: 600px) {
-            .features-grid { grid-template-columns: 1fr; }
             .options { grid-template-columns: 1fr; }
             .hero-title { font-size: 1.8rem; }
         }
@@ -156,34 +149,33 @@
         <div class="hero-badge">Neurodivergência Adulta</div>
         <h1 class="hero-title">Sua mente opera em uma <br><span style="color: var(--accent);">frequência diferente?</span></h1>
         <p class="hero-desc">
-            Altas Habilidades não se resumem a "ser inteligente". É uma forma distinta de processar o mundo, marcada por intensidade emocional, curiosidade insaciável e percepção aguda.
+            Altas habilidades não são apenas sobre QI alto, mas sobre uma forma distinta de processar o mundo, marcada por intensidade emocional e percepção aguda.
         </p>
 
-        <div class="features-grid">
-            <div class="feature-item">
-                <h3>Rastreio Qualitativo</h3>
-                <p>Baseado em critérios clínicos de sobre-excitabilidade e multipotencialidade.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Privacidade Total</h3>
-                <p>Seus dados são processados localmente. Nada é enviado para servidores externos.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Relatório Profissional</h3>
-                <p>Ao final, gere um documento técnico para levar ao seu psicólogo ou psiquiatra.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Critério Científico</h3>
-                <p>Desenvolvido com foco no fenótipo adulto de superdotação.</p>
-            </div>
-        </div>
+        <button class="btn-start" onclick="startQuiz()">INICIAR RASTREIO GRATUITO</button>
 
-        <button class="btn-start" onclick="startQuiz()">INICIAR AVALIAÇÃO GRATUITA</button>
-        <p style="font-size: 0.75rem; color: #94A3B8; margin-top: 20px;">Tempo estimado: 5 minutos.</p>
+        <div class="articles-section">
+            <h2 style="color: var(--primary); text-align: center; margin-bottom: 30px;">Conhecimento e Insights</h2>
+            
+            <article class="article-card">
+                <h3>Altas Habilidades em Adultos: Muito Além do QI</h3>
+                <p>Muitos adultos vivem com uma configuração neurobiológica singular sem nunca terem sido identificados. Altas Habilidades (AH) manifestam-se através de uma curiosidade insaciável e uma "sobre-excitabilidade" que torna o indivíduo mais sensível a estímulos sensoriais e emocionais. Entender estas características é o primeiro passo para transformar o que parecia um fardo em um potencial imenso.</p>
+            </article>
+
+            <article class="article-card">
+                <h3>Lidando com a Sobrecarga Sensorial e Emocional</h3>
+                <p>A intensidade é a marca registrada da superdotação. O mundo pode ser percebido de forma amplificada: luzes mais fortes, sons mais altos e emoções vividas na potência máxima. Reconhecer que esta sobrecarga faz parte da sua natureza é crucial para desenvolver estratégias de manejo e encontrar equilíbrio na vida adulta.</p>
+            </article>
+
+            <article class="article-card">
+                <h3>O Caminho para o Diagnóstico Profissional</h3>
+                <p>Um rastreio online é um excelente ponto de partida para o autoconhecimento, mas não substitui a avaliação clínica. O diagnóstico formal em adultos envolve uma análise multidisciplinar por psicólogos ou psiquiatras especializados. Validar sua história através de um especialista ajuda a otimizar seu desenvolvimento pleno.</p>
+            </article>
+        </div>
     </div>
 
     <div id="quiz-section">
-        <header>
+        <header style="text-align: center; margin-bottom: 20px;">
             <svg width="150" height="40" viewBox="0 0 200 60">
                 <path d="M30 10L35 25L50 30L35 35L30 50L25 35L10 30L25 25Z" fill="#0D9488"/>
                 <text x="65" y="38" font-family="sans-serif" font-weight="bold" font-size="26" fill="#1E293B">NEURALIS</text>
@@ -204,43 +196,43 @@
             <div style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.8;">Índice de Rastreio</div>
             <div class="score-num" id="total-score">0</div>
             <p id="status-msg" style="max-width: 600px; margin: 0 auto 30px; color: #E2E8F0;"></p>
-            <button id="download-pdf" class="btn-pdf">BAIXAR RELATÓRIO CLÍNICO (PDF)</button>
+            <button id="download-pdf" style="background: var(--accent); color: white; padding: 15px 30px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">BAIXAR RELATÓRIO PDF</button>
         </div>
     </div>
 
-<footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.75rem; color: #94A3B8; text-align: center;">
-    <p><strong>Aviso Legal:</strong> Este instrumento é uma ferramenta de auto-relato para fins informativos e educacionais. O resultado não constitui um diagnóstico médico ou psicológico definitivo. Como profissionais com experiência clínica, reforçamos que a avaliação de Altas Habilidades/Superdotação deve ser realizada em ambiente de consulta formal por especialistas devidamente registrados.</p>
-    <p>&copy; 2024 NEURALIS - Desenvolvido para a comunidade neurodivergente.</p>
-</footer>
+    <footer>
+        <p><strong>Aviso Legal:</strong> Este instrumento é uma ferramenta de autorrelato para fins informativos. O resultado não constitui um diagnóstico definitivo. A avaliação de Altas Habilidades deve ser realizada por especialistas registrados.</p>
+        <p>&copy; 2026 NEURALIS - neuralis.info</p>
+    </footer>
 </div>
 
 <script>
 const perguntas = [
     "Sinto que meu pensamento é mais rápido do que minha capacidade de falar ou escrever.",
     "Tenho uma necessidade intrínseca de entender o 'porquê' das coisas.",
-    "Demonstro uma sensibilidade aguda a estímulos sensoriais (luzes, sons).",
-    "Percebo padrões e conexões que outros parecem ignorar.",
+    "Demonstro uma sensibilidade aguda a estímulos sensoriais (luzes, sons, texturas).",
+    "Percebo padrões, conexões ou contradições que outros parecem ignorar.",
     "Mergulho em assuntos de interesse de forma obsessiva (hiperfoco).",
-    "Sinto uma profunda indignação diante de injustiças.",
-    "Tenho um vocabulário mais amplo ou preciso que a média.",
-    "Senti-me um 'estranho no ninho' desde a infância.",
-    "Aprendo coisas novas de forma autodidata e rápida.",
-    "Minhas emoções são vividas de forma muito intensa.",
-    "Questiono autoridades ou regras que não parecem ter lógica.",
-    "Tenho uma memória detalhada para fatos e conceitos.",
-    "Sinto um tédio paralisante em tarefas repetitivas.",
-    "Consigo concentrar atenção em várias coisas simultaneamente.",
-    "Prefiro a companhia de pessoas com nível intelectual similar.",
-    "Tenho um senso de humor peculiar ou complexo.",
-    "Sou extremamente autocrítico e busco a perfeição.",
-    "Antecipo problemas antes que outros percebam o cenário.",
-    "Minha mente raramente 'desliga'.",
-    "O ócio me gera ansiedade; preciso de estímulo constante.",
-    "Corrijo mentalmente erros lógicos alheios.",
-    "Lido facilmente com conceitos abstratos e teóricos.",
-    "Minha imaginação é rica e serve de refúgio.",
-    "Tomo decisões baseadas em lógica complexa e rápida.",
-    "Sinto que tenho um potencial latente ainda não explorado."
+    "Sinto uma profunda angústia ou indignação diante de injustiças.",
+    "Tenho um vocabulário mais amplo ou preciso do que a média das pessoas.",
+    "Muitas vezes me senti um 'estranho no ninho' desde a infância.",
+    "Aprendo coisas novas de forma autodidata e com extrema facilidade.",
+    "Minhas emoções são vividas de forma muito intensa e profunda.",
+    "Questiono autoridades ou regras que não parecem ter lógica aparente.",
+    "Tenho uma memória detalhada para fatos, conceitos ou eventos passados.",
+    "Sinto um tédio paralisante em tarefas repetitivas ou que já dominei.",
+    "Sou capaz de concentrar minha atenção em várias coisas simultaneamente.",
+    "Prefiro a companhia de pessoas com nível intelectual similar ao meu.",
+    "Tenho um senso de humor peculiar (ironia, trocadilhos, conexões complexas).",
+    "Sou extremamente autocrítico e busco a perfeição no que faço.",
+    "Frequentemente antecipo problemas ou soluções antes que outros percebam.",
+    "Minha mente raramente 'desliga'; estou sempre processando pensamentos.",
+    "Sinto uma necessidade constante de estímulo mental; o ócio me gera ansiedade.",
+    "Frequentemente corrijo mentalmente erros lógicos ou gramaticais alheios.",
+    "Tenho facilidade em lidar com conceitos abstratos e teóricos.",
+    "Minha imaginação é rica, vívida e muitas vezes me serve de refúgio.",
+    "Tomo decisões baseadas em uma lógica complexa que nem sempre explico bem.",
+    "Sinto que tenho um potencial latente que ainda não foi explorado."
 ];
 
 function startQuiz() {
@@ -255,16 +247,9 @@ $(document).ready(function() {
     const labels = ["Nunca", "Raramente", "Às vezes", "Frequente", "Sempre"];
 
     perguntas.forEach((q, i) => {
-        let html = `
-            <div class="question-card">
-                <span class="question-text">${i + 1}. ${q}</span>
-                <div class="options">`;
+        let html = `<div class="question-card"><span class="question-text"><b>${i+1}.</b> ${q}</span><div class="options">`;
         for (let v = 1; v <= 5; v++) {
-            html += `
-                <div class="option">
-                    <input type="radio" name="q${i}" id="q${i}_${v}" value="${v}">
-                    <label for="q${i}_${v}">${labels[v-1]}</label>
-                </div>`;
+            html += `<div class="option"><input type="radio" name="q${i}" id="q${i}_${v}" value="${v}"><label for="q${i}_${v}">${labels[v-1]}</label></div>`;
         }
         html += `</div></div>`;
         quizContainer.append(html);
@@ -281,8 +266,8 @@ $(document).ready(function() {
             $('#total-score').text(total);
             
             let msg = total > 85 
-                ? "INDICATIVO FORTE: Seu perfil é altamente compatível com Altas Habilidades/Superdotação. Recomenda-se busca por avaliação neuropsicológica para confirmação e manejo de potencial." 
-                : "PERFIL PADRÃO: Sua pontuação sugere um funcionamento dentro da média populacional, com talentos específicos que podem ser desenvolvidos naturalmente.";
+                ? "INDICATIVO FORTE: Seu perfil é altamente compatível com Altas Habilidades. Recomendamos busca por avaliação profissional." 
+                : "PERFIL PADRÃO: Sua pontuação sugere um funcionamento dentro da média populacional esperada.";
             
             $('#status-msg').text(msg);
             $('#result-area').fadeIn();
@@ -294,13 +279,13 @@ $(document).ready(function() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         doc.setFontSize(22);
-        doc.text("NEURALIS - Relatório de Rastreio", 20, 25);
+        doc.text("NEURALIS - Relatorio de Rastreio", 20, 25);
         doc.setFontSize(12);
-        doc.text(`Score: ${$('#total-score').text()} pontos`, 20, 40);
+        doc.text(`Score Final: ${$('#total-score').text()} pontos`, 20, 40);
         doc.text(`Data: ${new Date().toLocaleDateString()}`, 20, 48);
         const splitMsg = doc.splitTextToSize($('#status-msg').text(), 170);
         doc.text(splitMsg, 20, 65);
-        doc.save('Relatorio_Neuralis.pdf');
+        doc.save('Relatorio_Neuralis_AHSD.pdf');
     });
 });
 </script>
