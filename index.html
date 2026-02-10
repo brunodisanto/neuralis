@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEURALIS | Inteligência e Intensidade</title>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1E293B;
+            --accent: #0D9488;
+            --bg: #F8FAFC;
+            --text: #334155;
+            --white: #ffffff;
+            --border: #E2E8F0;
+        }
+
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container { 
+            max-width: 850px; 
+            margin: 40px auto; 
+            background: var(--white); 
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 50px rgba(30, 41, 59, 0.05); 
+        }
+
+        /* --- LANDING PAGE STYLES --- */
+        #landing-page { text-align: center; padding: 20px 0; }
+        
+        .hero-badge {
+            background: rgba(13, 148, 136, 0.1);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin: 20px 0;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: #64748B;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .feature-item {
+            padding: 20px;
+            border-radius: 12px;
+            background: #F1F5F9;
+        }
+
+        .feature-item h3 { margin: 0 0 10px 0; font-size: 1rem; color: var(--accent); }
+        .feature-item p { margin: 0; font-size: 0.85rem; color: #475569; }
+
+        .btn-start {
+            background: var(--primary);
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(30, 41, 59, 0.2);
+        }
+
+        .btn-start:hover { transform: translateY(-3px); background: #0f172a; }
+
+        /* --- QUIZ STYLES (Hidden initially) --- */
+        #quiz-section { display: none; }
+
+        header { text-align: center; margin-bottom: 30px; }
+        
+        #progress-container { 
+            position: sticky; top: 0; background: var(--white); 
+            padding: 15px 0; z-index: 10; border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        progress { width: 100%; height: 8px; border-radius: 10px; margin-top: 8px; }
+        progress::-webkit-progress-bar { background: #E2E8F0; border-radius: 10px; }
+        progress::-webkit-progress-value { background: var(--accent); border-radius: 10px; }
+
+        .question-card { 
+            margin-bottom: 20px; padding: 25px; 
+            border: 1px solid var(--border); border-radius: 16px; 
+        }
+
+        .question-text { font-weight: 600; font-size: 1.1rem; margin-bottom: 20px; display: block; }
+        
+        .options { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        .option label { 
+            display: flex; align-items: center; justify-content: center;
+            background: #F8FAFC; height: 45px; border-radius: 10px;
+            font-size: 0.8rem; cursor: pointer; border: 1px solid var(--border);
+        }
+
+        input[type="radio"]:checked + label { background: var(--accent); color: white; border-color: var(--accent); }
+
+        #result-area { 
+            display: none; background: var(--primary); color: white;
+            padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px;
+        }
+
+        .score-num { font-size: 4rem; font-weight: 800; color: var(--accent); }
+        .btn-pdf { 
+            background: var(--accent); color: white; padding: 15px 30px; 
+            border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .features-grid { grid-template-columns: 1fr; }
+            .options { grid-template-columns: 1fr; }
+            .hero-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="landing-page">
+        <div class="hero-badge">Neurodivergência Adulta</div>
+        <h1 class="hero-title">Sua mente opera em uma <br><span style="color: var(--accent);">frequência diferente?</span></h1>
+        <p class="hero-desc">
+            Altas Habilidades não se resumem a "ser inteligente". É uma forma distinta de processar o mundo, marcada por intensidade emocional, curiosidade insaciável e percepção aguda.
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-item">
+                <h3>Rastreio Qualitativo</h3>
+                <p>Baseado em critérios clínicos de sobre-excitabilidade e multipotencialidade.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Privacidade Total</h3>
+                <p>Seus dados são processados localmente. Nada é enviado para servidores externos.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Relatório Profissional</h3>
+                <p>Ao final, gere um documento técnico para levar ao seu psicólogo ou psiquiatra.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Critério Científico</h3>
+                <p>Desenvolvido com foco no fenótipo adulto de superdotação.</p>
+            </div>
+        </div>
+
+        <button class="btn-start" onclick="startQuiz()">INICIAR AVALIAÇÃO GRATUITA</button>
+        <p style="font-size: 0.75rem; color: #94A3B8; margin-top: 20px;">Tempo estimado: 5 minutos.</p>
+    </div>
+
+    <div id="quiz-section">
+        <header>
+            <svg width="150" height="40" viewBox="0 0 200 60">
+                <path d="M30 10L35 25L50 30L35 35L30 50L25 35L10 30L25 25Z" fill="#0D9488"/>
+                <text x="65" y="38" font-family="sans-serif" font-weight="bold" font-size="26" fill="#1E293B">NEURALIS</text>
+            </svg>
+        </header>
+
+        <div id="progress-container">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
+                <span>Progresso da Análise</span>
+                <span id="progress-text">0/25</span>
+            </div>
+            <progress id="quiz-progress" value="0" max="25"></progress>
+        </div>
+
+        <div id="quiz-container"></div>
+
+        <div id="result-area">
+            <div style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.8;">Índice de Rastreio</div>
+            <div class="score-num" id="total-score">0</div>
+            <p id="status-msg" style="max-width: 600px; margin: 0 auto 30px; color: #E2E8F0;"></p>
+            <button id="download-pdf" class="btn-pdf">BAIXAR RELATÓRIO CLÍNICO (PDF)</button>
+        </div>
+    </div>
+
+<footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.75rem; color: #94A3B8; text-align: center;">
+    <p><strong>Aviso Legal:</strong> Este instrumento é uma ferramenta de auto-relato para fins informativos e educacionais. O resultado não constitui um diagnóstico médico ou psicológico definitivo. Como profissionais com experiência clínica, reforçamos que a avaliação de Altas Habilidades/Superdotação deve ser realizada em ambiente de consulta formal por especialistas devidamente registrados.</p>
+    <p>&copy; 2024 NEURALIS - Desenvolvido para a comunidade neurodivergente.</p>
+</footer>
+</div>
+
+<script>
+const perguntas = [
+    "Sinto que meu pensamento é mais rápido do que minha capacidade de falar ou escrever.",
+    "Tenho uma necessidade intrínseca de entender o 'porquê' das coisas.",
+    "Demonstro uma sensibilidade aguda a estímulos sensoriais (luzes, sons).",
+    "Percebo padrões e conexões que outros parecem ignorar.",
+    "Mergulho em assuntos de interesse de forma obsessiva (hiperfoco).",
+    "Sinto uma profunda indignação diante de injustiças.",
+    "Tenho um vocabulário mais amplo ou preciso que a média.",
+    "Senti-me um 'estranho no ninho' desde a infância.",
+    "Aprendo coisas novas de forma autodidata e rápida.",
+    "Minhas emoções são vividas de forma muito intensa.",
+    "Questiono autoridades ou regras que não parecem ter lógica.",
+    "Tenho uma memória detalhada para fatos e conceitos.",
+    "Sinto um tédio paralisante em tarefas repetitivas.",
+    "Consigo concentrar atenção em várias coisas simultaneamente.",
+    "Prefiro a companhia de pessoas com nível intelectual similar.",
+    "Tenho um senso de humor peculiar ou complexo.",
+    "Sou extremamente autocrítico e busco a perfeição.",
+    "Antecipo problemas antes que outros percebam o cenário.",
+    "Minha mente raramente 'desliga'.",
+    "O ócio me gera ansiedade; preciso de estímulo constante.",
+    "Corrijo mentalmente erros lógicos alheios.",
+    "Lido facilmente com conceitos abstratos e teóricos.",
+    "Minha imaginação é rica e serve de refúgio.",
+    "Tomo decisões baseadas em lógica complexa e rápida.",
+    "Sinto que tenho um potencial latente ainda não explorado."
+];
+
+function startQuiz() {
+    $('#landing-page').fadeOut(400, function() {
+        $('#quiz-section').fadeIn();
+        window.scrollTo(0,0);
+    });
+}
+
+$(document).ready(function() {
+    const quizContainer = $('#quiz-container');
+    const labels = ["Nunca", "Raramente", "Às vezes", "Frequente", "Sempre"];
+
+    perguntas.forEach((q, i) => {
+        let html = `
+            <div class="question-card">
+                <span class="question-text">${i + 1}. ${q}</span>
+                <div class="options">`;
+        for (let v = 1; v <= 5; v++) {
+            html += `
+                <div class="option">
+                    <input type="radio" name="q${i}" id="q${i}_${v}" value="${v}">
+                    <label for="q${i}_${v}">${labels[v-1]}</label>
+                </div>`;
+        }
+        html += `</div></div>`;
+        quizContainer.append(html);
+    });
+
+    $(document).on('change', 'input[type="radio"]', function() {
+        const respondidas = $('input[type="radio"]:checked').length;
+        $('#quiz-progress').val(respondidas);
+        $('#progress-text').text(`${respondidas}/25`);
+
+        if (respondidas === 25) {
+            let total = 0;
+            $('input[type="radio"]:checked').each(function() { total += parseInt($(this).val()); });
+            $('#total-score').text(total);
+            
+            let msg = total > 85 
+                ? "INDICATIVO FORTE: Seu perfil é altamente compatível com Altas Habilidades/Superdotação. Recomenda-se busca por avaliação neuropsicológica para confirmação e manejo de potencial." 
+                : "PERFIL PADRÃO: Sua pontuação sugere um funcionamento dentro da média populacional, com talentos específicos que podem ser desenvolvidos naturalmente.";
+            
+            $('#status-msg').text(msg);
+            $('#result-area').fadeIn();
+            $('html, body').animate({ scrollTop: $("#result-area").offset().top - 50 }, 800);
+        }
+    });
+
+    $('#download-pdf').on('click', function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(22);
+        doc.text("NEURALIS - Relatório de Rastreio", 20, 25);
+        doc.setFontSize(12);
+        doc.text(`Score: ${$('#total-score').text()} pontos`, 20, 40);
+        doc.text(`Data: ${new Date().toLocaleDateString()}`, 20, 48);
+        const splitMsg = doc.splitTextToSize($('#status-msg').text(), 170);
+        doc.text(splitMsg, 20, 65);
+        doc.save('Relatorio_Neuralis.pdf');
+    });
+});
+</script>
+</body>
+</html>
